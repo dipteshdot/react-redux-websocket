@@ -37,7 +37,7 @@ wss.on('connection', function connection (ws) {
 			id: updatedMachine.id,
 			health: updatedMachine.health
 		}));
-	}, 500);
+	}, 3000);
 });
 
 console.log('WebSocket listening on port 1337');
