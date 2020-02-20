@@ -13,9 +13,18 @@ import Health from './Health';
 class EditMachines extends Component {
 	constructor (props) {
 		super(props);
+		const { state } = props.location;
 		this.state = {
 			name: '',
-			redirect: false
+			health: state.health
+		};
+	}
+
+	componentDidMount () {
+		const data = this;
+		window.ws.onmessage = function (event) {
+			const eventData = JSON.parse(event.data);
+			data.setState({ health: eventData.health });
 		};
 	}
 
@@ -40,8 +49,8 @@ class EditMachines extends Component {
 
 	render () {
 		const { state } = this.props.location;
-		const { name: machineName, ip_address, health } = state;
-		const { name } = this.state;
+		const { name: machineName, ip_address } = state;
+		const { name, health } = this.state;
 
 		return (
 			<div>
