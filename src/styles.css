@@ -89,3 +89,7 @@ progress {
 progress::-webkit-progress-bar {
 	background: #fff;
 }
+
+.health{
+	text-align: center;
+}

@@ -43,7 +43,7 @@ class Machines extends Component {
 									<tr key={index} onClick={() => this.handleEdit(obj)}>
 										<td>{obj.name}</td>
 										<td>{obj.ip_address}</td>
-										<td><Health value={obj.health} /></td>
+										<td><div className="health"><h3>{obj.health}</h3><Health value={obj.health} /></div></td>
 									</tr>
 								);
 							})

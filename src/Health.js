@@ -16,7 +16,7 @@ export default class Health extends Component {
 
 		return (
 			<div>
-				{<progress className={className} min="0" max="100" value={value} />}
+				<progress className={className} min="0" max="100" value={value} />
 			</div>
 		);
 	}
