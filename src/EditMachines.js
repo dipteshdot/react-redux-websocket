@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { requestEditMachines, requestMachines } from './redux/machines/actions';
+import { requestEditMachines, requestMachines, requestAllMachines } from './redux/machines/actions';
 
 import './styles.css';
 import Health from './Health';
@@ -22,9 +22,10 @@ class EditMachines extends Component {
 
 	componentDidMount () {
 		const data = this;
+		const { state } = this.props.location;
+		this.props.requestAllMachines(state.id);
 		window.ws.onmessage = function (event) {
-			const eventData = JSON.parse(event.data);
-			data.setState({ health: eventData.health });
+			data.props.requestAllMachines(state.id);
 		};
 	}
 
@@ -50,8 +51,11 @@ class EditMachines extends Component {
 	render () {
 		const { state } = this.props.location;
 		const { name: machineName, ip_address } = state;
-		const { name, health } = this.state;
-
+		let { name, health } = this.state;
+		const { requestedMachine } = this.props;
+		if (requestedMachine && requestedMachine.data) {
+			health = requestedMachine.data.health;
+		}
 		return (
 			<div>
 				<div className='container'>
@@ -80,13 +84,13 @@ class EditMachines extends Component {
 }
 const mapStateToProps = state => {
 	const { Machines } = state;
-	const { machine, error, isLoading } = Machines;
-	return { machine, error, isLoading };
+	const { machine, error, isLoading, requestedMachine } = Machines;
+	return { machine, error, isLoading, requestedMachine };
 };
 
 const mapDispatchToProps = dispatch =>
 	bindActionCreators(
-		{ requestEditMachines, requestMachines },
+		{ requestEditMachines, requestMachines, requestAllMachines },
 		dispatch
 	);
 

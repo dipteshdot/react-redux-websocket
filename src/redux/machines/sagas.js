@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { MACHINES, successMachines, errorMachines } from './actions';
+import { MACHINES, successMachines, errorMachines, ALL, successAllMachines, errorAllMachines } from './actions';
 import { CONSTANTS } from '../../enum';
 import request from '../../utils/request';
 
@@ -34,14 +34,14 @@ function* RequestMachinesById ({ payload }) {
 			url: `${API_URL}/machines/${payload}`
 		});
 		if (response.status === 200) {
-			yield put(successMachines(response));
+			yield put(successAllMachines(response));
 		} else if (response.status === 404) {
-			yield put(errorMachines('Error while Loading Data'));
+			yield put(errorAllMachines('Error while Loading Data'));
 		} else if (response.status === 500) {
-			yield put(errorMachines(response.data.Error));
+			yield put(errorAllMachines(response.data.Error));
 		}
 	} catch (error) {
-		yield put(errorMachines(error.message));
+		yield put(errorAllMachines(error.message));
 	}
 }
 
@@ -70,6 +70,7 @@ function* UpdateMachine ({ payload }) {
 }
 export default function* Machines () {
 	yield takeLatest(MACHINES + REQUESTED, RequestAllMachines);
+	yield takeLatest(MACHINES + ALL + REQUESTED, RequestMachinesById);
 	yield takeLatest(MACHINES + EDIT, RequestMachinesById);
 	yield takeLatest(MACHINES + EDIT + REQUESTED, UpdateMachine);
 }
